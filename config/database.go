@@ -9,7 +9,7 @@ import (
 var DB *gorm.DB
  func ConnectDatabase()  {
 	var err error
-	dsn:="host=localhost user=postgres password=gorm dbname=ecomerce port=5432 sslmode=disable"
+	dsn:="host=dpg-d2svpvbe5dus73db7f20-a user=ecomerce_3rsi_user password=N4iWNLISUHvesVIbjIa49ogVvOUr263R dbname=ecomerce_3rsi port=5432 sslmode=disable"
 	DB,err=gorm.Open(postgres.Open(dsn),&gorm.Config{})
 	if err!=nil {
 		panic("server coudnt connect connect")
