@@ -31,6 +31,7 @@ type User struct {
 type MerchantProfile struct {
     gorm.Model
     UserID      uint   `json:"user_id"` // FK → links to User
+    Phone    string `json:"phone"`
     Products []Product `gorm:"foreignKey:MerchantProfileID" json:"products,omitempty"`
 }
 

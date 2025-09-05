@@ -18,13 +18,10 @@ func AddProduct(context *gin.Context) {
 		context.JSON(http.StatusBadRequest,gin.H{"status":"fail","message":err.Error()})
 		return
 	}
-
   if err=config.DB.Create(&product).Error;err!=nil{
    context.JSON(http.StatusInternalServerError,gin.H{"status":"fail","message":"internal server error,please try again"})
 	 return
 	}
-
-
  context.JSON(http.StatusCreated,gin.H{"status":"success","data":product})
 
 }

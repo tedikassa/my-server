@@ -14,7 +14,8 @@ type Order struct {
 }
 type OrderItem struct {
     gorm.Model
-    OrderID    uint     
+    OrderID    uint 
+		 Order      Order  `json:"order,omitempty"`    
     ProductID  uint    `json:"productId" binding:"required"`
     Product    Product `json:"product,omitempty"` // preload if needed
     MerchantProfileID uint    `json:"merchantProfileId" binding:"required"`
@@ -26,6 +27,7 @@ type OrderItem struct {
 		Address string `json:"address"`
 		DeliveredCode string
 		Delivered bool `gorm:"defualt:false"`
+		MerchantStatus string `gorm:"defualt:'unpaid'"`
 }
 type SantimWebhook struct {
     TxnID   string `json:"txnId"`
@@ -33,4 +35,8 @@ type SantimWebhook struct {
     Amount  string `json:"amount"`
 }
 
+type ConfirmDeliveryRequest struct {
+    ItemID        uint   `json:"itemId" binding:"required"`
+    DeliveredCode string `json:"deliveredCode" binding:"required"`
+}
 

@@ -14,18 +14,6 @@ import (
 	"example.com/ecomerce/sdk"
 	"github.com/gin-gonic/gin"
 )
-
-func Payment(context *gin.Context) {
-	var order model.Order
-	userId:=context.Param("id")
-	err:=context.ShouldBindJSON(&order)
-	if err!=nil {
-		 	context.JSON(http.StatusBadRequest,gin.H{"status":"fail","error":err.Error(),})
-	   return
-	}
-	
- 
-	// Santim Test
 const PRIVATE_KEY_IN_PEM = `
 -----BEGIN EC PRIVATE KEY-----
 MHcCAQEEIF/mI9tSZxKbfEniC+3yfvwIS/D76+p/ky/oDmKAwu5roAoGCCqGSM49
@@ -37,6 +25,16 @@ AwEHoUQDQgAEqJl+TIowE6CAhoghgmH+cdzn5+WNax9/REqXJf6b1HdJCRZBCXWT
 	const GATEWAY_MERCHANT_ID = "9e2dab64-e2bb-4837-9b85-d855dd878d2b"
 
 	const testBed = false
+
+func Payment(context *gin.Context) {
+	var order model.Order
+	userId:=context.Param("id")
+	err:=context.ShouldBindJSON(&order)
+	if err!=nil {
+		 	context.JSON(http.StatusBadRequest,gin.H{"status":"fail","error":err.Error(),})
+	   return
+	}
+	
 
 	sdk, err := sdk.NewSantimpaySDK(GATEWAY_MERCHANT_ID, PRIVATE_KEY_IN_PEM, testBed)
 	if err != nil {
@@ -112,6 +110,65 @@ func generateCode(n int) string {
     }
     return hex.EncodeToString(b)
 }
+func ConfirmDelivery(context *gin.Context) {
+    // Merchant ID from URL (e.g. /api/merchant/:id/confirm)
+    merchantID, _ := strconv.Atoi(context.Param("id"))
+
+    // Bind JSON body
+    var req model.ConfirmDeliveryRequest
+    if err := context.ShouldBindJSON(&req); err != nil {
+        context.JSON(http.StatusBadRequest, gin.H{"status": "fail", "error": "bad data"})
+        return
+    }
+
+    // Find the order item
+    var item model.OrderItem
+    if err := config.DB.First(&item, req.ItemID).Error; err != nil {
+        context.JSON(http.StatusNotFound, gin.H{"status": "fail", "error": "order item not found"})
+        return
+    }
+
+    // Check merchant ID
+    if item.MerchantProfileID != uint(merchantID) {
+        context.JSON(http.StatusUnauthorized, gin.H{"status": "fail", "error": "unauthorized"})
+        return
+    }
+
+    // Check delivery code
+    if item.DeliveredCode != req.DeliveredCode {
+        context.JSON(http.StatusUnauthorized, gin.H{"status": "fail", "error": "wrong delivery code"})
+        return
+    }
+
+    // Update delivered status
+    if err := config.DB.Model(&item).Update("delivered", true).Error; err != nil {
+        context.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "error": "server error"})
+        return
+    }
+		sdk, err := sdk.NewSantimpaySDK(GATEWAY_MERCHANT_ID, PRIVATE_KEY_IN_PEM, testBed)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError,gin.H{"status":"fail","error":"server error"})
+		return
+	}
+	var merchant model.MerchantProfile
+if err := config.DB.First(&merchant, item.MerchantProfileID).Error; err != nil {
+    context.JSON(http.StatusNotFound, gin.H{"status": "fail", "error": "merchant not found"})
+    return
+}
+	payoutID:=fmt.Sprintf("order-item-%d",item.ID)
+	resp,err:=sdk.SendToCustomer(payoutID,item.Price,"for delivered order",merchant.Phone, "cbebirr")
+	if err != nil {
+    context.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "error": err.Error()})
+    return
+}
+    // Respond success
+    context.JSON(http.StatusOK, gin.H{
+        "status": "success",
+        "message": "delivery confirmed",
+        "payout": resp,
+    })
+}
+
 
 
 /*
