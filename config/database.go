@@ -16,5 +16,5 @@ var DB *gorm.DB
 	}
 
  println("Database connection establish")
- DB.AutoMigrate(&model.Product{},&model.User{},&model.Image{},&model.MerchantProfile{},&model.Order{})
+ DB.AutoMigrate(&model.Product{},&model.User{},&model.Image{},&model.MerchantProfile{},&model.Order{},&model.OrderItem{})
  }
