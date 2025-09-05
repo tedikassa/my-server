@@ -19,11 +19,11 @@ type RegisterInput struct {
 
 type User struct {
     gorm.Model
-    Name     string `json:"name" binding:"required,min=3"`
-    Email    string `json:"email" gorm:"unique" binding:"required,email"`
-    Password string `json:"password" binding:"required,min=6"`
+    Name     string `json:"name" `
+    Email    string `json:"email" gorm:"unique" `
+    Password string `json:"password"`
     Role     string `gorm:"default:'user'"` // "user" or "merchant"
-    Phone    string `json:"phone" binding:"omitempty"`
+    Phone    string `json:"phone" `
 
     MerchantProfile MerchantProfile `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE" json:"-"`
 }
