@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 
 	"math/rand"
 	"net/http"
@@ -31,7 +33,7 @@ AwEHoUQDQgAEqJl+TIowE6CAhoghgmH+cdzn5+WNax9/REqXJf6b1HdJCRZBCXWT
 
 	const GATEWAY_MERCHANT_ID = "9e2dab64-e2bb-4837-9b85-d855dd878d2b"
 
-	const testBed = true
+	const testBed = false
 
 	sdk, err := sdk.NewSantimpaySDK(GATEWAY_MERCHANT_ID, PRIVATE_KEY_IN_PEM, testBed)
 	if err != nil {
@@ -61,31 +63,36 @@ AwEHoUQDQgAEqJl+TIowE6CAhoghgmH+cdzn5+WNax9/REqXJf6b1HdJCRZBCXWT
 
 }
 
-// func SantimpayWebhook(c *gin.Context){
+func SantimpayWebhook(c *gin.Context){
 
-// 	body, err := ioutil.ReadAll(c.Request.Body)
-// 	if err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"status": "fail", "error": "cannot read request body"})
-// 		return
-// 	}
+	body, err := ioutil.ReadAll(c.Request.Body)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "fail", "error": "cannot read request body"})
+		return
+	}
 
-// 	// Log the raw body (optional, for debugging)
-// 	fmt.Println("Webhook payload:", string(body))
+	// Log the raw body (optional, for debugging)
+	fmt.Println("Webhook payload:", string(body))
 
-// 	// Parse JSON payload
-// 	var payload map[string]interface{}
-// 	if err := json.Unmarshal(body, &payload); err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"status": "fail", "error": "invalid JSON"})
-// 		return
-// 	}
+	// Parse JSON payload
+	var payload map[string]interface{}
+	if err := json.Unmarshal(body, &payload); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "fail", "error": "invalid JSON"})
+		return
+	}
 
-// 	transactionID, _ := payload["id"].(string)
-// 	status, _ := payload["status"].(string)
-// 	amount, _ := payload["amount"].(float64)
+	transactionID, _ := payload["id"].(string)
+	status, _ := payload["status"].(string)
+	amount, _ := payload["amount"].(float64)
 
-// 	fmt.Printf("Transaction ID: %s, Status: %s, Amount: %.2f\n", transactionID, status, amount)
+	fmt.Printf("Transaction ID: %s, Status: %s, Amount: %.2f\n", transactionID, status, amount)
 
-// 	c.JSON(http.StatusOK, gin.H{"status": "success"})
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
+}
 
-// }
+/*
+git add -A
+git commit -m 'update'
+git push -u origin main 
 
+*/
