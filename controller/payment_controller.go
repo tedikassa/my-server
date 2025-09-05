@@ -72,7 +72,7 @@ AwEHoUQDQgAEqJl+TIowE6CAhoghgmH+cdzn5+WNax9/REqXJf6b1HdJCRZBCXWT
 	}
 
 	fmt.Println("Payment URL:", paymentURL)
-  context.JSON(http.StatusOK,paymentURL)
+  context.JSON(http.StatusOK,gin.H{"paymenturl":paymentURL,"data":order})
 
 }
 
