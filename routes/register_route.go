@@ -9,7 +9,7 @@ import (
 
 func RegistorRoutes(server *gin.Engine) {
   server.POST("/api/product",controller.AddProduct)
-	server.POST("/api/payment",controller.Payment)
+	server.POST("/api/payment/:id",controller.Payment)
    server.GET("/api/product",controller.GetAllProduct)
 	server.GET("/api/product/:id",controller.GetProductById)
 	server.POST("/api/signup",controller.Signup)
