@@ -20,7 +20,7 @@ func Payment(context *gin.Context) {
 	userId:=context.Param("id")
 	err:=context.ShouldBindJSON(&order)
 	if err!=nil {
-		 	context.JSON(http.StatusBadRequest,gin.H{"status":"fail","error":"bad data"})
+		 	context.JSON(http.StatusBadRequest,gin.H{"status":"fail","error":err.Error(),})
 	   return
 	}
 	
