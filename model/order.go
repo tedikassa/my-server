@@ -14,6 +14,12 @@ type Order struct {
 		Price      float64 `json:"price" binding:"required,gt=0"` 
 		TotalPrice float64      `json:"total_amount" binding:"required,gt=0"`
 }
+type SantimWebhook struct {
+    TxnID   string `json:"txnId"`
+    Status  string `json:"Status"`
+    Amount  string `json:"amount"`
+    
+}
 
 // OrderItem represents a single product in an order.
 // type OrderItem struct {

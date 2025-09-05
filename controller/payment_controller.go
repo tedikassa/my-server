@@ -1,15 +1,13 @@
 package controller
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 
 	"math/rand"
 	"net/http"
 	"strconv"
 	"time"
-
+	"example.com/ecomerce/model"
 	"example.com/ecomerce/sdk"
 	"github.com/gin-gonic/gin"
 )
@@ -63,32 +61,35 @@ AwEHoUQDQgAEqJl+TIowE6CAhoghgmH+cdzn5+WNax9/REqXJf6b1HdJCRZBCXWT
 
 }
 
-func SantimpayWebhook(c *gin.Context){
 
-	body, err := ioutil.ReadAll(c.Request.Body)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"status": "fail", "error": "cannot read request body"})
-		return
-	}
 
-	// Log the raw body (optional, for debugging)
-	fmt.Println("Webhook payload:", string(body))
+func SantimpayWebhook(c *gin.Context) {
+    var payload model.SantimWebhook
 
-	// Parse JSON payload
-	var payload map[string]interface{}
-	if err := json.Unmarshal(body, &payload); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"status": "fail", "error": "invalid JSON"})
-		return
-	}
+    if err := c.BindJSON(&payload); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"status": "fail", "error": "invalid JSON"})
+        return
+    }
 
-	transactionID, _ := payload["id"].(string)
-	status, _ := payload["status"].(string)
-	amount, _ := payload["amount"].(float64)
+    // Convert amount string to float64 if you want
+    amount, _ := strconv.ParseFloat(payload.Amount, 64)
 
-	fmt.Printf("Transaction ID: %s, Status: %s, Amount: %.2f\n", transactionID, status, amount)
+    fmt.Printf("Transaction ID: %s, Status: %s, Amount: %.2f\n",
+        payload.TxnID, payload.Status, amount)
 
-	c.JSON(http.StatusOK, gin.H{"status": "success"})
+    // // Example: update your order
+    // if payload.Status == "SUCCESS" {
+    //     config.DB.Model(&model.Order{}).
+    //         Where("transaction_id = ?", payload.TxnID).
+    //         Updates(map[string]interface{}{
+    //             "status": "paid",
+    //             "amount": amount,
+    //         })
+    // }
+
+    c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
+
 
 /*
 git add -A
