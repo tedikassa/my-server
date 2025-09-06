@@ -77,30 +77,44 @@ func Payment(context *gin.Context) {
 
 
 func SantimpayWebhook(c *gin.Context) {
-    var payload model.SantimWebhook
+    var payload map[string]interface{} // generic map to see all fields
     if err := c.BindJSON(&payload); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"status": "fail", "error": "invalid JSON"})
+        c.JSON(http.StatusBadRequest, gin.H{
+            "status": "fail",
+            "error":  "invalid JSON",
+        })
         return
     }
 
-    // Convert amount string to float64 if you want
-    amount, _ := strconv.ParseFloat(payload.Amount, 64)
-		fmt.Println("id:",payload.ID)
-    fmt.Printf("Transaction ID: %s, Status: %s, Amount: %.2f\n",
-        payload.TxnID, payload.Status, amount)
-     payload.Status = "SUCCESS"
-    // Example: update your order
-    if payload.Status == "SUCCESS" {
-        config.DB.Model(&model.Order{}).
-            Where("transaction_id = ?", payload.TxnID).
+    // Debug: log entire payload
+    fmt.Printf("SantimPay webhook: %+v\n", payload)
+
+    // Extract fields safely
+    txnID, _ := payload["txnId"].(string)
+    status, _ := payload["status"].(string)
+    amountStr, _ := payload["amount"].(string)
+    clientRef, _ := payload["clientReference"].(string)
+
+    amount, _ := strconv.ParseFloat(amountStr, 64)
+
+    fmt.Printf("TxnID: %s, Status: %s, Amount: %.2f, ClientRef: %s\n",
+        txnID, status, amount, clientRef)
+
+    // Use your own clientReference to update the order
+    if status == "SUCCESS" {
+        result := config.DB.Model(&model.Order{}).
+            Where("transaction_id = ?", clientRef).
             Updates(map[string]interface{}{
-                "status": "paid",
+                "status":      "paid",
                 "total_price": amount,
             })
+
+        fmt.Println("Rows updated:", result.RowsAffected)
     }
 
     c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
+
 func generateCode(n int) string {
     b := make([]byte, n)
     _, err := rand.Read(b)
