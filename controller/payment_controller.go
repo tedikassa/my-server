@@ -43,7 +43,9 @@ func Payment(context *gin.Context) {
 	}
 
 	rand.Seed(time.Now().UnixNano())
-	//id := rand.Intn(1000000000)
+	id := rand.Intn(1000000000)
+	tId := strconv.Itoa(int(id))
+order.TransactionID=tId
 	
 	uId,_:=strconv.Atoi(userId)
 	order.UserID=uint(uId)
