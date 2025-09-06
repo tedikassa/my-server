@@ -45,7 +45,7 @@ func Payment(context *gin.Context) {
 	rand.Seed(time.Now().UnixNano())
 	id := rand.Intn(1000000000)
  strid := strconv.Itoa(int(id))
-order.TransactionID=strid
+order.Key=strid
 	
 	uId,_:=strconv.Atoi(userId)
 	order.UserID=uint(uId)
@@ -65,12 +65,12 @@ order.TransactionID=strid
 	const cancelRedirectURL = "https://santimpay.com"
 
 	// Generate a payment URL
-	paymentURL, err := sdk.GeneratePaymentURL("132456860", order.TotalPrice, "online market", successRedirectURL, failureRedirectURL, notifyURL, phoneNumber, cancelRedirectURL)
+	paymentURL, err := sdk.GeneratePaymentURL(strid, order.TotalPrice, "online market", successRedirectURL, failureRedirectURL, notifyURL, phoneNumber, cancelRedirectURL)
 	if err != nil {
 			context.JSON(http.StatusUnauthorized,gin.H{"status":"fail","error":"please enter valid private key or merchantId"})
 			return
 	}
-
+  fmt.Println("key:",strid)
 	fmt.Println("Payment URL:", paymentURL)
   context.JSON(http.StatusOK,gin.H{"paymenturl":paymentURL,"data":order})
 
@@ -95,20 +95,21 @@ func SantimpayWebhook(c *gin.Context) {
     txnID, _ := payload["txnId"].(string)
     status, _ := payload["status"].(string)
     amountStr, _ := payload["amount"].(string)
-    orderID, _ := payload["thirdPartyId"].(string)
+    key, _ := payload["thirdPartyId"].(string)
 
     amount, _ := strconv.ParseFloat(amountStr, 64)
 
-    fmt.Printf("TxnIDm: %s, Status: %s, Amount: %.2f, orderID: %s\n",
-        txnID, status, amount, orderID)
-
+    fmt.Printf("TxnID: %s, Status: %s, Amount: %.2f, key: %s\n",
+        txnID, status, amount, key)
+      status="SUCCESS"
     // Use your own clientReference to update the order
     if status == "SUCCESS" {
         result := config.DB.Model(&model.Order{}).
-            Where("transaction_id = ?", orderID).
+            Where("key = ?", key).
             Updates(map[string]interface{}{
                 "status":      "paid",
                 "total_price": amount,
+								"transaction_id":txnID,
             })
 
         fmt.Println("Rows updated:", result.RowsAffected)

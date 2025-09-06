@@ -4,7 +4,8 @@ import "gorm.io/gorm"
 
 type Order struct {
     gorm.Model
-		TransactionID string `gorm:"unique"` 
+		Key string `gorm:"unique"`
+		TransactionID string  
     UserID     uint     `json:"userId" binding:"required"`    
     User      User        `gorm:"foreignKey:UserID" json:"user,omitempty"`
     Status      string       `json:"status" gorm:"default:'pending'" binding:"omitempty,oneof=pending paid delivered cancelled"`
