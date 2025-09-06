@@ -17,4 +17,5 @@ func RegistorRoutes(server *gin.Engine) {
 	server.PATCH("/api/update/user/:id",controller.UpdateUser)
 	server.POST("/api/webhook", controller.SantimpayWebhook)
 	server.POST("/api/merchant/payment/:id",controller.ConfirmDelivery)
+	server.GET("/api/orders",controller.GetAllOrder)
 }

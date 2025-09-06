@@ -102,5 +102,17 @@ func GetProductsByCategory(c *gin.Context) {
         "data":   products,
     })
 }
+func GetMerchantProduct(context *gin.Context)  {
+	var merchant model.MerchantProfile
+	merchantID,_:=strconv.Atoi(context.Param("id"))
+	if err:=config.DB.Preload("Products").First(&merchant,merchantID).Error;err!=nil{
+			context.JSON(http.StatusNotFound, gin.H{"status":"fail","error": "not found"})
+        return
+	}
+	 context.JSON(http.StatusOK, gin.H{
+        "status": "success",
+        "data":   merchant,
+    })
+}
 
 

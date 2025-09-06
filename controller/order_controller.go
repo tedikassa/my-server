@@ -27,3 +27,12 @@ func UserOrder(context *gin.Context)  {
 			}		
 context.JSON(http.StatusOK,gin.H{"status":"sucess","data":orders})
 }
+
+func GetAllOrder(context *gin.Context)  {
+	var orders []model.Order
+	if err:=config.DB.Preload("OrderItems").Find(&orders).Error;err!=nil{
+		context.JSON(http.StatusInternalServerError,gin.H{"status":"fail","message":err.Error()})
+		return
+	}
+	context.JSON(http.StatusOK,gin.H{"status":"sucess","data":orders})
+}
