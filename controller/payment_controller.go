@@ -43,11 +43,10 @@ func Payment(context *gin.Context) {
 	}
 
 	rand.Seed(time.Now().UnixNano())
-	id := rand.Intn(1000000000)
-	strid := strconv.Itoa(int(id))
+	//id := rand.Intn(1000000000)
+	
 	uId,_:=strconv.Atoi(userId)
 	order.UserID=uint(uId)
-   order.TransactionID=strid
 	  for i := range order.OrderItems {
         order.OrderItems[i].DeliveredCode = generateCode(4) // 8 hex chars
     }
@@ -55,6 +54,7 @@ func Payment(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError,gin.H{"status":"fail","error":"server error"})
 	   return
  }
+ strid := strconv.Itoa(int(order.ID))
 
 	const phoneNumber = ""//"+251909090909"
 	const notifyURL = "https://your-gebeta.onrender.com/api/webhook"
@@ -93,17 +93,17 @@ func SantimpayWebhook(c *gin.Context) {
     txnID, _ := payload["txnId"].(string)
     status, _ := payload["status"].(string)
     amountStr, _ := payload["amount"].(string)
-    clientRef, _ := payload["clientReference"].(string)
+    orderID, _ := payload["thirdPartyId"].(string)
 
     amount, _ := strconv.ParseFloat(amountStr, 64)
 
-    fmt.Printf("TxnIDm: %s, Status: %s, Amount: %.2f, ClientRef: %s\n",
-        txnID, status, amount, clientRef)
+    fmt.Printf("TxnIDm: %s, Status: %s, Amount: %.2f, orderID: %s\n",
+        txnID, status, amount, orderID)
 
     // Use your own clientReference to update the order
     if status == "SUCCESS" {
         result := config.DB.Model(&model.Order{}).
-            Where("transaction_id = ?", clientRef).
+            Where("transaction_id = ?", orderID).
             Updates(map[string]interface{}{
                 "status":      "paid",
                 "total_price": amount,
