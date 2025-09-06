@@ -97,7 +97,7 @@ func SantimpayWebhook(c *gin.Context) {
 
     amount, _ := strconv.ParseFloat(amountStr, 64)
 
-    fmt.Printf("TxnID: %s, Status: %s, Amount: %.2f, ClientRef: %s\n",
+    fmt.Printf("TxnIDm: %s, Status: %s, Amount: %.2f, ClientRef: %s\n",
         txnID, status, amount, clientRef)
 
     // Use your own clientReference to update the order
