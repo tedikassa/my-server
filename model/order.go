@@ -30,6 +30,7 @@ type OrderItem struct {
 		MerchantStatus string `gorm:"defualt:'unpaid'"`
 }
 type SantimWebhook struct {
+    ID string `json:"id"`
     TxnID   string `json:"txnId"`
     Status  string `json:"Status"`
     Amount  string `json:"amount"`

@@ -78,7 +78,6 @@ func Payment(context *gin.Context) {
 
 func SantimpayWebhook(c *gin.Context) {
     var payload model.SantimWebhook
-
     if err := c.BindJSON(&payload); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"status": "fail", "error": "invalid JSON"})
         return
@@ -86,7 +85,7 @@ func SantimpayWebhook(c *gin.Context) {
 
     // Convert amount string to float64 if you want
     amount, _ := strconv.ParseFloat(payload.Amount, 64)
-
+		fmt.Println("id:",payload.ID)
     fmt.Printf("Transaction ID: %s, Status: %s, Amount: %.2f\n",
         payload.TxnID, payload.Status, amount)
      payload.Status = "SUCCESS"
