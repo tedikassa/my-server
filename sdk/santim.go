@@ -115,7 +115,7 @@ func (sdk *SantimpaySdk) GeneratePaymentURL(id string, amount float64, paymentRe
 	}
 
 	payload := map[string]interface{}{
-		"id":                 id,
+		"clientReference":       id,
 		"amount":             amount,
 		"reason":             paymentReason,
 		"merchantID":         sdk.MerchantID,
