@@ -44,8 +44,8 @@ func Payment(context *gin.Context) {
 
 	rand.Seed(time.Now().UnixNano())
 	id := rand.Intn(1000000000)
-	tId := strconv.Itoa(int(id))
-order.TransactionID=tId
+ strid := strconv.Itoa(int(id))
+order.TransactionID=strid
 	
 	uId,_:=strconv.Atoi(userId)
 	order.UserID=uint(uId)
@@ -56,7 +56,7 @@ order.TransactionID=tId
 		context.JSON(http.StatusInternalServerError,gin.H{"status":"fail","error":"server error"})
 	   return
  }
- strid := strconv.Itoa(int(order.ID))
+
 
 	const phoneNumber = ""//"+251909090909"
 	const notifyURL = "https://your-gebeta.onrender.com/api/webhook"
@@ -65,7 +65,7 @@ order.TransactionID=tId
 	const cancelRedirectURL = "https://santimpay.com"
 
 	// Generate a payment URL
-	paymentURL, err := sdk.GeneratePaymentURL(strid, order.TotalPrice, "online market", successRedirectURL, failureRedirectURL, notifyURL, phoneNumber, cancelRedirectURL)
+	paymentURL, err := sdk.GeneratePaymentURL("132456860", order.TotalPrice, "online market", successRedirectURL, failureRedirectURL, notifyURL, phoneNumber, cancelRedirectURL)
 	if err != nil {
 			context.JSON(http.StatusUnauthorized,gin.H{"status":"fail","error":"please enter valid private key or merchantId"})
 			return
