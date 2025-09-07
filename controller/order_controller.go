@@ -16,7 +16,25 @@ func MerchantOrder(context *gin.Context) {
    	context.JSON(http.StatusNotFound,gin.H{"status":"fail","message":err.Error()})
 		return
 	}
-	context.JSON(http.StatusOK,gin.H{"status":"sucess","data":items})
+	var resp []model.OrderItemResponse
+	for _, i := range items {
+    resp = append(resp, model.OrderItemResponse{
+        ID: i.ID,
+        OrderID: i.OrderID,
+        OrderStatus: i.Order.Status, // only one field you need
+        ProductID: i.ProductID,
+        MerchantProfileID: i.MerchantProfileID,
+        Quantity: i.Quantity,
+        Price: i.Price,
+        Name: i.Name,
+        Email: i.Email,
+        Address: i.Address,
+        DeliveredCode: i.DeliveredCode,
+        Delivered: i.Delivered,
+        MerchantStatus: i.MerchantStatus,
+    })
+}
+	context.JSON(http.StatusOK,gin.H{"status":"sucess","data":resp})
 }
 func UserOrder(context *gin.Context)  {
 		userID,_:=strconv.Atoi(context.Param("id"))

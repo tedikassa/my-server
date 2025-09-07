@@ -30,6 +30,22 @@ type OrderItem struct {
 		Delivered bool `gorm:"defualt:false"`
 		MerchantStatus string `gorm:"defualt:'unpaid'"`
 }
+type OrderItemResponse struct {
+    ID               uint    `json:"id"`
+    OrderID          uint    `json:"orderId"`
+    OrderStatus      string  `json:"orderStatus"`
+    ProductID        uint    `json:"productId"`
+    MerchantProfileID uint   `json:"merchantProfileId"`
+    Quantity         int     `json:"quantity"`
+    Price            float64 `json:"price"`
+    Name             string  `json:"name"`
+    Email            string  `json:"email"`
+    Address          string  `json:"address"`
+    DeliveredCode    string  `json:"deliveredCode"`
+    Delivered        bool    `json:"delivered"`
+    MerchantStatus   string  `json:"merchantStatus"`
+}
+
 type SantimWebhook struct {
     ID string `json:"id"`
     TxnID   string `json:"txnId"`
