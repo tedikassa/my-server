@@ -13,7 +13,7 @@ func main() {
     server := gin.Default()
     
     server.Use(cors.New(cors.Config{
-        AllowOrigins:     []string{"http://localhost:8080/"}, // replace with deployed frontend URL
+        AllowOrigins:     []string{"http://localhost:5173"}, // replace with deployed frontend URL
         AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
         AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
         AllowCredentials: true,
