@@ -19,5 +19,5 @@ func RegistorRoutes(server *gin.Engine) {
 	server.POST("/api/merchant/payment/:id",controller.ConfirmDelivery)
 	server.GET("/api/orders",controller.GetAllOrder)
 	server.GET("/api/merchant/product/:id",controller.GetMerchantProduct)
-	server.GET("/api/merchant/product/:id",controller.MerchantOrder)
+	server.GET("/api/merchant/order/:id",controller.MerchantOrder)
 }
