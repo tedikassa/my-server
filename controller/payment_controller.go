@@ -28,7 +28,6 @@ AwEHoUQDQgAEqJl+TIowE6CAhoghgmH+cdzn5+WNax9/REqXJf6b1HdJCRZBCXWT
 
 func Payment(context *gin.Context) {
 	var order model.Order
-	userId:=context.Param("id")
 	err:=context.ShouldBindJSON(&order)
 	if err!=nil {
 		 	context.JSON(http.StatusBadRequest,gin.H{"status":"fail","error":err.Error(),})
@@ -47,8 +46,6 @@ func Payment(context *gin.Context) {
  strid := strconv.Itoa(int(id))
 order.Key=strid
 	
-	uId,_:=strconv.Atoi(userId)
-	order.UserID=uint(uId)
 	  for i := range order.OrderItems {
         order.OrderItems[i].DeliveredCode = generateCode(4) // 8 hex chars
     }

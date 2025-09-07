@@ -18,4 +18,6 @@ func RegistorRoutes(server *gin.Engine) {
 	server.POST("/api/webhook", controller.SantimpayWebhook)
 	server.POST("/api/merchant/payment/:id",controller.ConfirmDelivery)
 	server.GET("/api/orders",controller.GetAllOrder)
+	server.GET("/api/merchant/product/:id",controller.GetMerchantProduct)
+	server.GET("/api/merchant/product/:id",controller.MerchantOrder)
 }

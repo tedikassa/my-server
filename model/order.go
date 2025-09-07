@@ -16,7 +16,7 @@ type Order struct {
 type OrderItem struct {
     gorm.Model
     OrderID    uint 
-		 Order      Order  `json:"order,omitempty"`    
+		Order      Order  `json:"order,omitempty"`    
     ProductID  uint    `json:"productId" binding:"required"`
     Product    Product `json:"product,omitempty"` // preload if needed
     MerchantProfileID uint    `json:"merchantProfileId" binding:"required"`
