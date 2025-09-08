@@ -28,7 +28,7 @@ type OrderItem struct {
 		Address string `json:"address"`
 		DeliveredCode string
 		Delivered bool `gorm:"defualt:false"`
-		MerchantStatus string `gorm:"defualt:'unpaid'"`
+		MerchantStatus string `gorm:"defualt:false"`
 }
 type OrderItemResponse struct {
     ID               uint    `json:"id"`

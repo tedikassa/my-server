@@ -171,7 +171,8 @@ if err := config.DB.First(&merchant, item.MerchantProfileID).Error; err != nil {
 	id := rand.Intn(1000000000)
  strid := strconv.Itoa(int(id))
  fmt.Println("clientRefernce:",strid)
-	resp,err:=sdk.SendToCustomer(strid,1,"for delivered order","+251938646985", "Telebirr")
+  notifyURL:= "https://santimpay.com"
+	resp,err:=sdk.SendToCustomer(strid,1,"for delivered order","+251938646985", "Telebirr",notifyURL)
 	
 	if err != nil {
     context.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "error": err.Error()})

@@ -171,7 +171,7 @@ func (sdk *SantimpaySdk) GeneratePaymentURL(id string, amount float64, paymentRe
 	}
 }
 
-func (sdk *SantimpaySdk) SendToCustomer(id string, amount float64, paymentReason, phoneNumber, paymentMethod string) (interface{}, error) {
+func (sdk *SantimpaySdk) SendToCustomer(id string, amount float64, paymentReason, phoneNumber, paymentMethod string,notifyUrl string) (interface{}, error) {
 	token, err := sdk.generateSignedTokenForDirectPayment(amount, paymentReason, paymentMethod, phoneNumber)
 	if err != nil {
 		return nil, err
@@ -186,6 +186,8 @@ func (sdk *SantimpaySdk) SendToCustomer(id string, amount float64, paymentReason
 		"signedToken":           token,
 		"receiverAccountNumber": phoneNumber,
 		"paymentMethod":         paymentMethod,
+		"notifyURL": notifyUrl,
+		 
 	}
 	jsonPayload, err := json.Marshal(payload)
 	if err != nil {
