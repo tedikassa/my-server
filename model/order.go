@@ -58,4 +58,3 @@ type ConfirmDeliveryRequest struct {
     ItemID        uint   `json:"itemId" binding:"required"`
     DeliveredCode string `json:"deliveredCode" binding:"required"`
 }
-

@@ -124,10 +124,9 @@ func generateCode(n int) string {
     return hex.EncodeToString(b)
 }
 func ConfirmDelivery(context *gin.Context) {
-    // Merchant ID from URL (e.g. /api/merchant/:id/confirm)
+    
     merchantID, _ := strconv.Atoi(context.Param("id"))
 
-    // Bind JSON body
     var req model.ConfirmDeliveryRequest
     if err := context.ShouldBindJSON(&req); err != nil {
         context.JSON(http.StatusBadRequest, gin.H{"status": "fail", "error": "bad data"})
