@@ -10,6 +10,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+
 	"net/http"
 
 	"strings"
@@ -189,12 +190,14 @@ func (sdk *SantimpaySdk) SendToCustomer(id string, amount float64, paymentReason
 	if err != nil {
 		return nil, err
 	}
+	
 	resp, err := sdk.HTTPClient.Post(sdk.BaseURL+"/payout-transfer", "application/json", strings.NewReader(string(jsonPayload)))
 	if err != nil {
 		fmt.Println("error:",err.Error());
 		return nil, err
 	}
-	
+	fmt.Println("response:",resp)
+  
 	defer resp.Body.Close()
 	if resp.StatusCode == http.StatusOK {
 		fmt.Println("status code:",resp.StatusCode);
