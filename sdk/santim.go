@@ -197,24 +197,18 @@ func (sdk *SantimpaySdk) SendToCustomer(id string, amount float64, paymentReason
 		fmt.Println("error:",err.Error());
 		return nil, err
 	}
-		bodyBytes, _ := io.ReadAll(resp.Body)
+body, _ := io.ReadAll(resp.Body)
 fmt.Println("status code:", resp.StatusCode)
-fmt.Println("response body:", string(bodyBytes))
-	defer resp.Body.Close()
-	if resp.StatusCode == http.StatusOK {
-		var response map[string]interface{}
-		if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
-			fmt.Println("error:",err.Error());
-			return "", err
-		}
-		url, ok := response["url"].(string)
-		if !ok {
-			return "", errors.New("URL not found in the response")
-		}
-		return url, nil
-	} else {
-		return nil, errors.New("failed to initiate B2C")
-	}
+fmt.Println("response body:", string(body))
+if resp.StatusCode == http.StatusOK {
+    var response map[string]interface{}
+    if err := json.Unmarshal(body, &response); err != nil {
+        return nil, err
+    }
+    return response, nil 
+}else {
+    return nil, fmt.Errorf("failed to initiate B2C: %s", string(body))
+}
 }
 
 func (sdk *SantimpaySdk) generateSignedTokenForDirectPaymentOrB2C(amount float64, paymentReason, paymentMethod, phoneNumber string) (string, error) {
