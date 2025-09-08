@@ -9,6 +9,7 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
 
 	"net/http"
@@ -196,11 +197,11 @@ func (sdk *SantimpaySdk) SendToCustomer(id string, amount float64, paymentReason
 		fmt.Println("error:",err.Error());
 		return nil, err
 	}
-	fmt.Println("response:",resp)
-  
+		bodyBytes, _ := io.ReadAll(resp.Body)
+fmt.Println("status code:", resp.StatusCode)
+fmt.Println("response body:", string(bodyBytes))
 	defer resp.Body.Close()
 	if resp.StatusCode == http.StatusOK {
-		fmt.Println("status code:",resp.StatusCode);
 		var response map[string]interface{}
 		if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
 			fmt.Println("error:",err.Error());
