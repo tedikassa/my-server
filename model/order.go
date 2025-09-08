@@ -30,7 +30,7 @@ type OrderItem struct {
 		Address string `json:"address"`
 		DeliveredCode string
 		Delivered bool `gorm:"defualt:false"`
-		MerchantStatus string `gorm:"defualt:false"`
+		MerchantStatus bool `gorm:"defualt:false"`
 }
 type OrderItemResponse struct {
     ID               uint    `json:"id"`
@@ -46,7 +46,7 @@ type OrderItemResponse struct {
     Address          string  `json:"address"`
     DeliveredCode    string  `json:"deliveredCode"`
     Delivered        bool    `json:"delivered"`
-    MerchantStatus   string  `json:"merchantStatus"`
+    MerchantStatus   bool  `json:"merchantStatus"`
 }
 
 type SantimWebhook struct {
