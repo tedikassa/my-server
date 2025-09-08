@@ -186,7 +186,7 @@ func (sdk *SantimpaySdk) SendToCustomer(id string, amount float64, paymentReason
 		"signedToken":           token,
 		"receiverAccountNumber": phoneNumber,
 		"paymentMethod":         paymentMethod,
-		"notifyURL": notifyUrl,
+		"notifyUrl": notifyUrl,
 		 
 	}
 	jsonPayload, err := json.Marshal(payload)
