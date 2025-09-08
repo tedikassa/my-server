@@ -167,8 +167,12 @@ if err := config.DB.First(&merchant, item.MerchantProfileID).Error; err != nil {
     context.JSON(http.StatusNotFound, gin.H{"status": "fail", "error": "merchant not found"})
     return
 }
-	payoutID:=fmt.Sprintf("order-item-%d",item.ID)
-	resp,err:=sdk.SendToCustomer(payoutID,item.Price,"for delivered order",merchant.Phone, "cbebirr")
+	rand.Seed(time.Now().UnixNano())
+	id := rand.Intn(1000000000)
+ strid := strconv.Itoa(int(id))
+ fmt.Println("clientRefernce:",strid)
+	resp,err:=sdk.SendToCustomer(strid,item.Price,"for delivered order",merchant.Phone, "cbebirr")
+	
 	if err != nil {
     context.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "error": err.Error()})
     return

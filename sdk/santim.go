@@ -191,12 +191,16 @@ func (sdk *SantimpaySdk) SendToCustomer(id string, amount float64, paymentReason
 	}
 	resp, err := sdk.HTTPClient.Post(sdk.BaseURL+"/payout-transfer", "application/json", strings.NewReader(string(jsonPayload)))
 	if err != nil {
+		fmt.Println("error:",err.Error());
 		return nil, err
 	}
+	
 	defer resp.Body.Close()
 	if resp.StatusCode == http.StatusOK {
+		fmt.Println("status code:",resp.StatusCode);
 		var response map[string]interface{}
 		if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+			fmt.Println("error:",err.Error());
 			return "", err
 		}
 		url, ok := response["url"].(string)
