@@ -34,6 +34,7 @@ type OrderItemResponse struct {
     ID               uint    `json:"id"`
     OrderID          uint    `json:"orderId"`
     OrderStatus      string  `json:"orderStatus"`
+		ProductName      string   `json:"productName"`
     ProductID        uint    `json:"productId"`
     MerchantProfileID uint   `json:"merchantProfileId"`
     Quantity         int     `json:"quantity"`

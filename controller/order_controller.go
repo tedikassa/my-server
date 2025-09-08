@@ -23,6 +23,7 @@ func MerchantOrder(context *gin.Context) {
         OrderID: i.OrderID,
         OrderStatus: i.Order.Status, // only one field you need
         ProductID: i.ProductID,
+				ProductName:i.Product.Name,
         MerchantProfileID: i.MerchantProfileID,
         Quantity: i.Quantity,
         Price: i.Price,
