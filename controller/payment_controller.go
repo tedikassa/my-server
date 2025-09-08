@@ -171,7 +171,7 @@ if err := config.DB.First(&merchant, item.MerchantProfileID).Error; err != nil {
 	id := rand.Intn(1000000000)
  strid := strconv.Itoa(int(id))
  fmt.Println("clientRefernce:",strid)
-  notifyURL:= "https://santimpay.com"
+  notifyURL:= "https://your-gebeta.onrender.com/api/webhook"
 	resp,err:=sdk.SendToCustomer(strid,1,"for delivered order","+251938646985", "Telebirr",notifyURL)
 	
 	if err != nil {
