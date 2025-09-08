@@ -14,7 +14,9 @@ type Order struct {
 		OrderItems []OrderItem   `gorm:"foreignKey:OrderID"`
 }
 type OrderItem struct {
+	  
     gorm.Model
+		PayoutID string `gorm:"unique"`
     OrderID    uint 
 		Order      Order  `json:"order,omitempty"`    
     ProductID  uint    `json:"productId" binding:"required"`

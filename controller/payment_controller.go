@@ -56,7 +56,7 @@ order.Key=strid
 
 
 	const phoneNumber = ""//"+251909090909"
-	const notifyURL = "https://your-gebeta.onrender.com/api/webhook"
+	const notifyURL = "https://your-gebeta.onrender.com/api/webhook/incoming"
 	const successRedirectURL = "https://santimpay.com"
 	const failureRedirectURL = "https://santimpay.com"
 	const cancelRedirectURL = "https://santimpay.com"
@@ -75,7 +75,7 @@ order.Key=strid
 
 
 
-func SantimpayWebhook(c *gin.Context) {
+func SantimpayWebhookIncoming(c *gin.Context) {
     var payload map[string]interface{} // generic map to see all fields
     if err := c.BindJSON(&payload); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{
@@ -87,10 +87,9 @@ func SantimpayWebhook(c *gin.Context) {
 
     // Debug: log entire payload
     fmt.Printf("SantimPay webhook: %+v\n", payload)
-
     // Extract fields safely
     txnID, _ := payload["txnId"].(string)
-    status, _ := payload["status"].(string)
+    status, _ := payload["Status"].(string)
     amountStr, _ := payload["amount"].(string)
     key, _ := payload["thirdPartyId"].(string)
 
@@ -171,13 +170,19 @@ if err := config.DB.First(&merchant, item.MerchantProfileID).Error; err != nil {
 	id := rand.Intn(1000000000)
  strid := strconv.Itoa(int(id))
  fmt.Println("clientRefernce:",strid)
-  notifyURL:= "https://your-gebeta.onrender.com/api/webhook"
+  notifyURL:= "https://your-gebeta.onrender.com/api/webhook/payout"
 	resp,err:=sdk.SendToCustomer(strid,1,"for delivered order","+251938646985", "Telebirr",notifyURL)
 	
 	if err != nil {
     context.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "error": err.Error()})
     return
-}
+		} 
+		result,_ := resp.(map[string]interface{})
+   payoutID,_:=result["txnId"].(string)
+    if err := config.DB.Model(&item).Update("payout_id",payoutID ).Error; err != nil {
+        context.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "error": "server error"})
+        return
+    }
     // Respond success
     context.JSON(http.StatusOK, gin.H{
         "status": "success",
@@ -186,7 +191,38 @@ if err := config.DB.First(&merchant, item.MerchantProfileID).Error; err != nil {
     })
 }
 
+func SantimpayWebhookPayout(c *gin.Context)  {
+	 var payload map[string]interface{} // generic map to see all fields
+    if err := c.BindJSON(&payload); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{
+            "status": "fail",
+            "error":  "invalid JSON",
+        })
+        return
+    }
 
+    // Debug: log entire payload
+    fmt.Printf("SantimPay webhook: %+v\n", payload)
+    // Extract fields safely
+    txnID, _ := payload["txnId"].(string)
+    status, _ := payload["Status"].(string)
+    amountStr, _ := payload["amount"].(string)
+    key, _ := payload["thirdPartyId"].(string)
+
+    amount, _ := strconv.ParseFloat(amountStr, 64)
+
+    fmt.Printf("TxnID: %s, Status: %s, Amount: %.2f, key: %s\n",
+        txnID, status, amount, key)
+    if status == "COMPLETED" {
+        result := config.DB.Model(&model.OrderItem{}).
+            Where("payout_id = ?", txnID).
+            Update("merchant_status",true)
+
+        fmt.Println("Rows updated:", result.RowsAffected)
+    }
+
+    c.JSON(http.StatusOK, gin.H{"status": "success"})
+}
 
 /*
 git add -A
