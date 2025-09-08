@@ -216,7 +216,7 @@ func SantimpayWebhookPayout(c *gin.Context)  {
     if status == "COMPLETED" {
         result := config.DB.Model(&model.OrderItem{}).
             Where("payout_id = ?", txnID).
-            Update("merchant_status",true)
+            Update("mer_status",true)
 
         fmt.Println("Rows updated:", result.RowsAffected)
     }
