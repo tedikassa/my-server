@@ -32,7 +32,7 @@ func MerchantOrder(context *gin.Context) {
         Address: i.Address,
         DeliveredCode: i.DeliveredCode,
         Delivered: i.Delivered,
-        MerchantStatus: i.MerchantStatus,
+        MerchantStatus: i.MerStatus,
     })
 }
 	context.JSON(http.StatusOK,gin.H{"status":"sucess","data":resp})
