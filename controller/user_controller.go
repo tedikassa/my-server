@@ -33,12 +33,12 @@ func Signup(context *gin.Context) {
     }
 		if input.Role=="merchant"{
 			 merchant = model.MerchantProfile{
-            UserID:      user.ID,
+          
 						Phone: user.Phone,
         }
         config.DB.Create(&merchant)
 		}    
-    context.JSON(http.StatusOK, gin.H{"message": "registered successfully", "user": user,"merchant":merchant})
+    context.JSON(http.StatusOK, gin.H{"status": "success", "user": user,"merchant":merchant})
 }
 
 

@@ -8,7 +8,7 @@ import (
 type RegisterInput struct {
     Name        string `json:"name" binding:"required,min=3"`
     Email       string `json:"email" binding:"required,email"`
-    Password    string `json:"password" binding:"required,min=6"`
+    Password    string `json:"password" binding:"required,min=4"`
     Role        string `json:"role" binding:"required,oneof=user merchant admin"`
     Phone       string `json:"phone" binding:"omitempty"`
 }
@@ -21,19 +21,19 @@ type User struct {
     Role     string `gorm:"default:'user'"` // "user" or "merchant"
     Phone    string `json:"phone" `
 
-    MerchantProfile MerchantProfile `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE" json:"-"`
+   MerchantProfile MerchantProfile `gorm:"foreignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE" json:"merchantProfile"`
 }
 
 type MerchantProfile struct {
     gorm.Model
-    UserID      uint   `json:"user_id"` // FK → links to User
+    UserID      uint    // FK → links to User
     Phone    string `json:"phone"`
     Products []Product `gorm:"foreignKey:MerchantProfileID" json:"products,omitempty"`
 }
 
 type Login struct {
 	Email string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required,min=6"`
+	Password string `json:"password" binding:"required,min=4"`
 }
 type Claims struct{
 	ID int
