@@ -138,13 +138,16 @@ func ConfirmDelivery(context *gin.Context) {
         context.JSON(http.StatusNotFound, gin.H{"status": "fail", "error": "order item not found"})
         return
     }
+		if item.MerStatus{
+				context.JSON(http.StatusUnauthorized, gin.H{"status": "fail", "error": "you have paid"})
+        return
+		}
 
     // Check merchant ID
     if item.MerchantProfileID != uint(merchantID) {
         context.JSON(http.StatusUnauthorized, gin.H{"status": "fail", "error": "unauthorized"})
         return
     }
-
     // Check delivery code
     if item.DeliveredCode != req.DeliveredCode {
         context.JSON(http.StatusUnauthorized, gin.H{"status": "fail", "error": "wrong delivery code"})
@@ -191,6 +194,72 @@ if err := config.DB.First(&merchant, item.MerchantProfileID).Error; err != nil {
         "payout": resp,
     })
 }
+   
+func AskPayout(context *gin.Context)  {
+	merchantID, _ := strconv.Atoi(context.Param("id"))
+	var input model.AskPayout
+	 if err := context.ShouldBindJSON(&input); err != nil {
+        context.JSON(http.StatusBadRequest, gin.H{"status": "fail", "error": "bad data"})
+        return
+    }
+    // Find the order item
+    var item model.OrderItem
+    if err := config.DB.First(&item, input.ItemID).Error; err != nil {
+        context.JSON(http.StatusNotFound, gin.H{"status": "fail", "error": "order item not found"})
+        return
+    }
+
+    // Check merchant ID
+    if item.MerchantProfileID != uint(merchantID) {
+        context.JSON(http.StatusUnauthorized, gin.H{"status": "fail", "error": "unauthorized"})
+        return
+    }
+		if !item.Delivered{
+			context.JSON(http.StatusUnauthorized, gin.H{"status": "fail", "error": "order is not delivered"})
+        return
+		}
+		if item.MerStatus{
+				context.JSON(http.StatusUnauthorized, gin.H{"status": "fail", "error": "you have paid"})
+        return
+		}
+		sdk, err := sdk.NewSantimpaySDK(GATEWAY_MERCHANT_ID, PRIVATE_KEY_IN_PEM, testBed)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError,gin.H{"status":"fail","error":"server error"})
+		return
+	}
+	var merchant model.MerchantProfile
+if err := config.DB.First(&merchant, item.MerchantProfileID).Error; err != nil {
+    context.JSON(http.StatusNotFound, gin.H{"status": "fail", "error": "merchant not found"})
+    return
+}
+		rand.Seed(time.Now().UnixNano())
+	id := rand.Intn(1000000000)
+ strid := strconv.Itoa(int(id))
+// phoneNumber:="+251938646985";
+ fmt.Println("clientRefernce:",strid)
+  notifyURL:= "https://your-gebeta.onrender.com/api/webhook/payout"
+	resp,err:=sdk.SendToCustomer(strid,1,"for delivered order","+251906626496", "Telebirr",notifyURL)
+	
+	if err != nil {
+    context.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "error": err.Error()})
+    return
+		} 
+		result,_ := resp.(map[string]interface{})
+   payoutID,_:=result["txnId"].(string)
+    if err := config.DB.Model(&item).Update("payout_id",payoutID ).Error; err != nil {
+        context.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "error": "server error"})
+        return
+    }
+    // Respond success
+    context.JSON(http.StatusOK, gin.H{
+        "status": "success",
+        "message": "delivery confirmed",
+        "payout": resp,
+    })
+	
+}
+
+
 
 func SantimpayWebhookPayout(c *gin.Context)  {
 	 var payload map[string]interface{} // generic map to see all fields

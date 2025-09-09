@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 	"strconv"
+
 	"example.com/ecomerce/config"
 	"example.com/ecomerce/model"
 	"example.com/ecomerce/utils"
@@ -33,6 +34,7 @@ func Signup(context *gin.Context) {
 		if input.Role=="merchant"{
 			 merchant = model.MerchantProfile{
             UserID:      user.ID,
+						Phone: user.Phone,
         }
         config.DB.Create(&merchant)
 		}    

@@ -11,10 +11,6 @@ type RegisterInput struct {
     Password    string `json:"password" binding:"required,min=6"`
     Role        string `json:"role" binding:"required,oneof=user merchant admin"`
     Phone       string `json:"phone" binding:"omitempty"`
-
-    // Only required if role = merchant
-    SantimpayID string `json:"santimpay_id" binding:"omitempty"`
-    PrivateKey  string `json:"private_key" binding:"omitempty"`
 }
 
 type User struct {
