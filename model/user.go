@@ -23,7 +23,6 @@ type User struct {
 
    MerchantProfile MerchantProfile `gorm:"foreignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE" json:"merchantProfile"`
 }
-
 type MerchantProfile struct {
     gorm.Model
     UserID      uint    // FK → links to User
