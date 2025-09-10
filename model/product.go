@@ -17,7 +17,7 @@ type Product struct {
 type Image struct {
     gorm.Model
     ProductID uint     
-    ImageURL  string `json:"url" binding:"required"`  
+    ImageURL  string `json:"url"`  
 }
 type UpdateProduct struct {
     Name        string   `json:"name" binding:"omitempty,min=3"`       
@@ -26,6 +26,6 @@ type UpdateProduct struct {
     Stock       int      `json:"stock" binding:"omitempty,gte=0"`      
     MerchantID  uint     `json:"merchant_id" binding:"omitempty"`      
     Category    string   `json:"category" binding:"omitempty,min=3"`   
-    Images      []Image  `json:"images" binding:"omitempty,dive"`      
+    Images      []Image  `json:"images" binding:"omitempty"`      
 }
 

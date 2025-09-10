@@ -40,7 +40,6 @@ func Payment(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError,gin.H{"status":"fail","error":"server error"})
 		return
 	}
-
 	rand.Seed(time.Now().UnixNano())
 	id := rand.Intn(1000000000)
  strid := strconv.Itoa(int(id))

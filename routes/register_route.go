@@ -10,6 +10,7 @@ import (
 
 func RegistorRoutes(server *gin.Engine) {
   server.POST("/api/product",middlewere.AuthMiddlewere,controller.AddProduct)
+	server.POST("/api/product/update/:id",middlewere.AuthMiddlewere,controller.UpdateProduct)
 	server.POST("/api/payment/:id",middlewere.AuthMiddlewere,controller.Payment)
    server.GET("/api/product",middlewere.AuthMiddlewere,controller.GetAllProduct)
 	server.GET("/api/product/:id",middlewere.AuthMiddlewere,controller.GetProductById)
