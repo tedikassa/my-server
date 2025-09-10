@@ -12,14 +12,15 @@ import (
 func main() {
     server := gin.Default()
     
-    // server.Use(cors.New(cors.Config{
-    //     AllowOrigins:     []string{"http://localhost:5173"}, // replace with deployed frontend URL
-    //     AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
-    //     AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
-    //     AllowCredentials: true,
-    // }))
-		server.Use(cors.Default()) // allows all origins
+   
 
+		server.Use(cors.New(cors.Config{
+    AllowOrigins:     []string{"http://localhost:5173", "https://your-gebeta.onrender.com"}, // front-end URLs
+    AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+    AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"}, // <-- include Authorization
+    ExposeHeaders:    []string{"Content-Length"},
+    AllowCredentials: true,
+}))
 
     config.ConnectDatabase()
     routes.RegistorRoutes(server)
