@@ -24,7 +24,6 @@ type UpdateProduct struct {
     Description string   `json:"description" binding:"omitempty,min=10"`
     Price       float64  `json:"price" binding:"omitempty,gt=0"`       
     Stock       int      `json:"stock" binding:"omitempty,gte=0"`           
-    Category    string   `json:"category" binding:"omitempty,min=3"`   
-    Images      []Image  `json:"images" binding:"omitempty"`      
+    Category    string   `json:"category" binding:"omitempty,min=3"`        
 }
 
