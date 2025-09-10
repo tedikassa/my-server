@@ -16,7 +16,7 @@ type Order struct {
 type OrderItem struct {
 	  
     gorm.Model
-		PayoutID string `gorm:"unique"`
+		PayoutID string 
     OrderID    uint 
 		Order      Order  `json:"order,omitempty"`    
     ProductID  uint    `json:"productId" binding:"required"`
