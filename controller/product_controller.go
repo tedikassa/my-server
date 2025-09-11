@@ -81,6 +81,29 @@ func UpdateProduct(context *gin.Context)  {
     context.JSON(http.StatusOK, gin.H{"status": "success", "product": product})
 	 
 }
+func DeleteProduct(c *gin.Context) {
+    productId, err := strconv.Atoi(c.Param("id"))
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "invalid id"})
+        return
+    }
+
+    // optional: check existence first
+    var product model.Product
+    if err := config.DB.First(&product, productId).Error; err != nil {
+        c.JSON(http.StatusNotFound, gin.H{"status": "fail", "error": "Product not found"})
+        return
+    }
+
+    // now delete
+    if err := config.DB.Delete(&product).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "error": "server error"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"status": "success", "product": product})
+}
+
 func GetProductsByCategory(c *gin.Context) {
     var products []model.Product
     category := c.Param("category")
