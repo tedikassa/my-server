@@ -45,26 +45,6 @@ func UserOrder(context *gin.Context)  {
 		return
 			}	
 			
-			var resp []model.OrderItemResponse
-	for _, i := range orders {
-    resp = append(resp, model.OrderItemResponse{
-        ID: i.ID,
-        OrderID: i.OrderID,
-        OrderStatus: i.Order.Status, // only one field you need
-        ProductID: i.ProductID,
-				ProductName:i.Product.Name,
-        MerchantProfileID: i.MerchantProfileID,
-        Quantity: i.Quantity,
-        Price: i.Price,
-        Name: i.Name,
-        Email: i.Email,
-        Address: i.Address,
-        DeliveredCode: i.DeliveredCode,
-        Delivered: i.Delivered,
-        MerchantStatus: i.MerStatus,
-    })
-}
-
 context.JSON(http.StatusOK,gin.H{"status":"sucess","data":orders})
 }
 
