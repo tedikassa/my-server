@@ -25,4 +25,5 @@ func RegistorRoutes(server *gin.Engine) {
 	server.GET("/api/merchant/order/:id",middlewere.AuthMiddlewere,controller.MerchantOrder)
 	server.POST("/api/webhook/payout",controller.SantimpayWebhookPayout)
 	server.POST("/api/merchant/payment/:id",middlewere.AuthMiddlewere,controller.AskPayout)
+	server.GET("/api/user/order/:id",controller.UserOrder)
 }
