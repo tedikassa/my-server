@@ -37,16 +37,40 @@ func MerchantOrder(context *gin.Context) {
 }
 	context.JSON(http.StatusOK,gin.H{"status":"sucess","data":resp})
 }
-func UserOrder(context *gin.Context)  {
-		userID,_:=strconv.Atoi(context.Param("id"))
-			var orders []model.Order
-			if err:=config.DB.Model(&model.Order{}).Preload("OrderItems").Where("user_id=?",userID).Find(&orders).Error;err!=nil{
-	    context.JSON(http.StatusNotFound,gin.H{"status":"fail","message":err.Error()})
-		return
-			}	
-			
-context.JSON(http.StatusOK,gin.H{"status":"sucess","data":orders})
+func UserOrder(context *gin.Context) {
+    userID, _ := strconv.Atoi(context.Param("id"))
+
+    var orders []model.Order
+    if err := config.DB.Model(&model.Order{}).
+        Preload("OrderItems.Product.Images").
+        Where("user_id = ? AND status=?", userID,"paid").
+        Find(&orders).Error; err != nil {
+        context.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": err.Error()})
+        return
+    }
+
+    // Flatten to only necessary info
+    var orderItems []map[string]interface{}
+    for _, order := range orders {
+        for _, item := range order.OrderItems {
+            orderItems = append(orderItems, map[string]interface{}{
+                "id":           item.ID,
+                "orderId":      order.ID,
+                "name":         item.Name,
+                "price":        item.Price,
+                "quantity":     item.Quantity,
+                "delivered":    item.Delivered,
+                "address":      item.Address,
+                "DeliveredCode": item.DeliveredCode,
+                "image":        item.Product.Images, 
+								"productName":item.Product.Name,
+            })
+        }
+    }
+
+    context.JSON(http.StatusOK, gin.H{"status": "success", "data": orderItems})
 }
+
 
 func GetAllOrder(context *gin.Context)  {
 	var orders []model.Order
