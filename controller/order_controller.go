@@ -43,7 +43,7 @@ func UserOrder(context *gin.Context) {
     var orders []model.Order
     if err := config.DB.Model(&model.Order{}).
         Preload("OrderItems.Product.Images").
-        Where("user_id = ? AND status=?", userID,"paid").
+        Where("user_id = ?", userID,"paid").
         Find(&orders).Error; err != nil {
         context.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": err.Error()})
         return
