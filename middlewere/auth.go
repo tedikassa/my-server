@@ -3,6 +3,7 @@ package middlewere
 import (
 	"net/http"
 	"strings"
+
 	"example.com/ecomerce/model"
 	"example.com/ecomerce/utils"
 	"github.com/gin-gonic/gin"
@@ -35,4 +36,16 @@ func AuthMiddlewere(context *gin.Context) {
 	context.Set("name",claims.Name)
 	context.Set("role",claims.Role)
 	
+}
+
+func MerchantMiddleware(c *gin.Context) {
+	role, exists := c.Get("role")
+	if !exists || role != "merchant" {
+		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
+			"status": "fail",
+			"error":  "access restricted to merchants only",
+		})
+		return
+	}
+	c.Next()
 }
