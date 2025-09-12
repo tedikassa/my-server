@@ -43,7 +43,7 @@ func UserOrder(context *gin.Context) {
     var orders []model.Order
     if err := config.DB.Model(&model.Order{}).
         Preload("OrderItems.Product.Images").
-        Where("user_id = ?", userID).
+        Where("user_id =? AND status=?", userID,"paid").
         Find(&orders).Error; err != nil {
         context.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": err.Error()})
         return
@@ -63,7 +63,7 @@ func UserOrder(context *gin.Context) {
                 "address":      item.Address,
                 "DeliveredCode": item.DeliveredCode,
                 "image":        item.Product.Images, 
-								"productName":item.Product.Name,
+				"productName":item.Product.Name,
             })
         }
     }
