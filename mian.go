@@ -15,7 +15,7 @@ func main() {
    
 
 		server.Use(cors.New(cors.Config{
-    AllowOrigins:     []string{"http://localhost:5173", "https://your-gebeta.onrender.com"}, // front-end URLs
+    AllowOrigins:     []string{"http://localhost:5173","https://your-gebeya.vercel.app", "https://your-gebeta.onrender.com"}, // front-end URLs
     AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
     AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"}, // <-- include Authorization
     ExposeHeaders:    []string{"Content-Length"},
