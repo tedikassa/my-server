@@ -68,7 +68,7 @@ func UserOrder(context *gin.Context) {
         }
     }
 
-    context.JSON(http.StatusOK, gin.H{"status": "success", "data": orderItems})
+    context.JSON(http.StatusOK, gin.H{"status": "success", "data": orderItems,"orders":orders})
 }
 
 
