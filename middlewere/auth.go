@@ -3,7 +3,6 @@ package middlewere
 import (
 	"net/http"
 	"strings"
-
 	"example.com/ecomerce/model"
 	"example.com/ecomerce/utils"
 	"github.com/gin-gonic/gin"

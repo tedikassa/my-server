@@ -18,3 +18,28 @@ var DB *gorm.DB
  println("Database connection establish")
  DB.AutoMigrate(&model.Product{},&model.User{},&model.Image{},&model.MerchantProfile{},&model.Order{},&model.OrderItem{})
  }
+ func ResetDatabase() {
+	
+	DB.Migrator().DropTable(
+		&model.Product{},
+		&model.User{},
+		&model.Image{},
+		&model.MerchantProfile{},
+		&model.Order{},
+		&model.OrderItem{},
+	)
+
+	println("All tables dropped")
+
+	
+	DB.AutoMigrate(
+		&model.Product{},
+		&model.User{},
+		&model.Image{},
+		&model.MerchantProfile{},
+		&model.Order{},
+		&model.OrderItem{},
+	)
+
+	println("All tables recreated")
+}

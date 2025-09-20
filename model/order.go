@@ -13,14 +13,13 @@ type Order struct {
 		TotalPrice float64      `json:"totalPrice" binding:"required,gt=0"`
 		OrderItems []OrderItem   `gorm:"foreignKey:OrderID"`
 }
-type OrderItem struct {
-	  
+type OrderItem struct { 
     gorm.Model
 		PayoutID string 
     OrderID    uint 
 		Order      Order  `json:"order,omitempty"`    
     ProductID  uint    `json:"productId" binding:"required"`
-    Product    Product `json:"product,omitempty"` // preload if needed
+    Product    Product `json:"product,omitempty"` 
     MerchantProfileID uint    `json:"merchantProfileId" binding:"required"`
 		MerchantProfile   `json:"merchantProfile,omitempty"`
     Quantity   int     `json:"quantity" binding:"required,gt=0"`
