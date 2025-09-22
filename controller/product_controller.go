@@ -139,3 +139,26 @@ func GetMerchantProduct(context *gin.Context)  {
 }
 
 
+func SearchProducts(c *gin.Context) {
+    query := c.Query("q") // e.g. /products/search?q=laptop
+    var products []model.Product
+
+    if query == "" {
+        c.JSON(http.StatusBadRequest, gin.H{
+            "status": "fail",
+            "message": "query parameter is required",
+        })
+        return
+    }
+
+    if err := config.DB.Model(&model.Product{}).
+        Preload("Images").
+        Where("name ILIKE ? OR description ILIKE ?", "%"+query+"%", "%"+query+"%").
+        Find(&products).Error; err != nil {
+
+        c.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "message": "server error"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"status": "success", "data": products})
+}
