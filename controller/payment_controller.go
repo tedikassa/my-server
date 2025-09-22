@@ -56,9 +56,9 @@ order.Key=strid
 
 	const phoneNumber = ""//"+251909090909"
 	const notifyURL = "https://your-gebeta.onrender.com/api/webhook/incoming"
-	const successRedirectURL = "https://santimpay.com"
-	const failureRedirectURL = "https://santimpay.com"
-	const cancelRedirectURL = "https://santimpay.com"
+	const successRedirectURL = "https://your-gebeya.vercel.app"
+	const failureRedirectURL = "https://your-gebeya.vercel.app"
+	const cancelRedirectURL = "https://your-gebeya.vercel.app"
 
 	// Generate a payment URL
 	paymentURL, err := sdk.GeneratePaymentURL(strid, order.TotalPrice, "online market", successRedirectURL, failureRedirectURL, notifyURL, phoneNumber, cancelRedirectURL)
