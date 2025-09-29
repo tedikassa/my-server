@@ -206,7 +206,7 @@ func AskPayout(context *gin.Context)  {
 // phoneNumber:="+251938646985";
  fmt.Println("clientRefernce:",strid)
   notifyURL:= "https://your-gebeta.onrender.com/api/webhook/payout"
-	resp,err:=sdk.SendToCustomer(strid,1,"for delivered order","+251906626496", "CBEbirr",notifyURL)
+	resp,err:=sdk.SendToCustomer(strid,1,"for delivered order","+251906626496", "CbeBirr",notifyURL)
 	if err != nil {
     context.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "error": err.Error()})
     return
