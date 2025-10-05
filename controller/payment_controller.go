@@ -208,7 +208,7 @@ func AskPayout(context *gin.Context)  {
   notifyURL:= "https://your-gebeta.onrender.com/api/webhook/payout"
 	resp,err:=sdk.SendToCustomer(strid,1,"for delivered order","+251906626496", "TeleBirr",notifyURL)
 	if err != nil {
-    context.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "error": err.Error()})
+    context.JSON(http.StatusInternalServerError, gin.H{"status and this is for me": "fail", "error": err.Error()})
     return
 		} 
     context.JSON(http.StatusOK, gin.H{
