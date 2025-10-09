@@ -29,3 +29,4 @@ func RegistorRoutes(server *gin.Engine) {
 	server.POST("/api/database/drop",controller.ResetDatabaseHandler)
 	server.GET("api/products/search",controller.SearchProducts)
 }
+

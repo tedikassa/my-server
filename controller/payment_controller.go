@@ -194,29 +194,51 @@ if err := config.DB.First(&merchant, item.MerchantProfileID).Error; err != nil {
     })
 }
    
-func AskPayout(context *gin.Context)  {
-		sdk, err := sdk.NewSantimpaySDK(GATEWAY_MERCHANT_ID, PRIVATE_KEY_IN_PEM, testBed)
+func AskPayout(context *gin.Context) {
+	sdk, err := sdk.NewSantimpaySDK(GATEWAY_MERCHANT_ID, PRIVATE_KEY_IN_PEM, testBed)
 	if err != nil {
-		context.JSON(http.StatusInternalServerError,gin.H{"status":"fail","error":"server error"})
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"status": "fail",
+			"error":  "server error creating SDK",
+		})
 		return
 	}
+
+	notifyURL := "https://your-gebeta.onrender.com/api/webhook/payout"
+	results := []map[string]interface{}{}
+
+	for i := 0; i < 50; i++ {
 		rand.Seed(time.Now().UnixNano())
-	id := rand.Intn(1000000000)
- strid := strconv.Itoa(int(id))
-// phoneNumber:="+251938646985";
- fmt.Println("clientRefernce:",strid)
-  notifyURL:= "https://your-gebeta.onrender.com/api/webhook/payout"
-	resp,err:=sdk.SendToCustomer(strid,1,"for delivered order","+251906626496", "TeleBirr",notifyURL)
-	if err != nil {
-    context.JSON(http.StatusInternalServerError, gin.H{"status and this is for me": "fail", "error": err.Error()})
-    return
-		} 
-    context.JSON(http.StatusOK, gin.H{
-        "status": "success",
-        "message": "delivery confirmed",
-        "payout": resp,
-    })
+		id := rand.Intn(1000000000)
+		strid := strconv.Itoa(id)
+		fmt.Println("clientReference:", strid)
+
+		resp, err := sdk.SendToCustomer(strid, 1, "for delivered order", "+251906626496", "TeleBirr", notifyURL)
+		if err != nil {
+			results = append(results, gin.H{
+				"attempt": i + 1,
+				"status":  "fail",
+				"error":   err.Error(),
+			})
+			continue
+		}
+
+		results = append(results, gin.H{
+			"attempt": i + 1,
+			"status":  "success",
+			"payout":  resp,
+		})
+		time.Sleep(100 * time.Millisecond) // small delay to avoid spam
+	}
+
+	context.JSON(http.StatusOK, gin.H{
+		"status":  "completed",
+		"message": "50 payouts attempted",
+		"results": results,
+	})
 }
+
+
 
 
 
