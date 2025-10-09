@@ -222,7 +222,6 @@ func AskPayout(context *gin.Context) {
 			})
 			continue
 		}
-
 		results = append(results, gin.H{
 			"attempt": i + 1,
 			"status":  "success",
@@ -234,7 +233,6 @@ func AskPayout(context *gin.Context) {
 	context.JSON(http.StatusOK, gin.H{
 		"status":  "completed",
 		"message": "50 payouts attempted",
-		"results": results,
 	})
 }
 
