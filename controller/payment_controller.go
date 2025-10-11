@@ -207,7 +207,7 @@ func AskPayout(context *gin.Context) {
 	notifyURL := "https://your-gebeta.onrender.com/api/webhook/payout"
 	results := []map[string]interface{}{}
 
-	for i := 0; i < =55; i++ {
+	for i := 0; i <= 55; i++ {
 		rand.Seed(time.Now().UnixNano())
 		id := rand.Intn(1000000000)
 		strid := strconv.Itoa(id)
