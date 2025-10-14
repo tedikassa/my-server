@@ -28,5 +28,6 @@ func RegistorRoutes(server *gin.Engine) {
 	server.GET("/api/user/order/:id",controller.UserOrder)
 	server.POST("/api/database/drop",controller.ResetDatabaseHandler)
 	server.GET("api/products/search",controller.SearchProducts)
+	server.POST("api/balance",controller.GetMerchantBalance)
 }
 

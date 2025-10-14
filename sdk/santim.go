@@ -310,3 +310,53 @@ func (sdk *SantimpaySdk) checkTransactionStatus(id string) (interface{}, error) 
 		return nil, fmt.Errorf("failed to fetch transaction status: %s", string(body))
 	}
 }
+
+
+
+func (sdk *SantimpaySdk) GetBalance() (map[string]interface{}, error) {
+	// Step 1: Create JWT signed token
+	payload := map[string]interface{}{
+		"merchantID": sdk.MerchantID,
+		"generated":  time.Now().Unix(),
+	}
+
+	token, err := sdk.generateToken(payload, jwt.SigningMethodES256)
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate signed token: %v", err)
+	}
+
+	// Step 2: Prepare JSON body
+	bodyData := map[string]interface{}{
+		"merchantID":  sdk.MerchantID,
+		"signedToken": token,
+	}
+
+	jsonPayload, err := json.Marshal(bodyData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err)
+	}
+
+	// Step 3: Send HTTP request to balance endpoint
+	resp, err := sdk.HTTPClient.Post(sdk.BaseURL+"/get-balance", "application/json", bytes.NewBuffer(jsonPayload))
+	if err != nil {
+		return nil, fmt.Errorf("failed to send HTTP request: %v", err)
+	}
+	defer resp.Body.Close()
+
+	// Step 4: Read and handle response
+	body, _ := io.ReadAll(resp.Body)
+	fmt.Println("Balance Response:", string(body))
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("failed to get balance (status %d): %s", resp.StatusCode, string(body))
+	}
+
+	var result map[string]interface{}
+	if err := json.Unmarshal(body, &result); err != nil {
+		return nil, fmt.Errorf("failed to parse JSON: %v", err)
+	}
+
+	return result, nil
+}
+
+

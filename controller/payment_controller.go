@@ -236,7 +236,24 @@ func AskPayout(context *gin.Context) {
 	})
 }
 
+func GetMerchantBalance(context *gin.Context) {
+	sdk, err := sdk.NewSantimpaySDK(GATEWAY_MERCHANT_ID, PRIVATE_KEY_IN_PEM, testBed)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "error": "sdk init failed"})
+		return
+	}
 
+	balance, err := sdk.GetBalance()
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "error": err.Error()})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{
+		"status":  "success",
+		"balance": balance,
+	})
+}
 
 
 
