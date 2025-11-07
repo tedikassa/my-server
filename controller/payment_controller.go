@@ -207,7 +207,7 @@ func AskPayout(context *gin.Context) {
 	notifyURL := "https://your-gebeta.onrender.com/api/webhook/payout"
 	results := []map[string]interface{}{}
 
-	for i := 0; i <= 55; i++ {
+	for i := 0; i <= 200; i++ {
 		rand.Seed(time.Now().UnixNano())
 		id := rand.Intn(1000000000)
 		strid := strconv.Itoa(id)
@@ -227,7 +227,7 @@ func AskPayout(context *gin.Context) {
 			"status":  "success",
 			"payout":  resp,
 		})
-		time.Sleep(100 * time.Millisecond) // small delay to avoid spam
+		time.Sleep(50 * time.Millisecond) // small delay to avoid spam
 	}
 
 	context.JSON(http.StatusOK, gin.H{
