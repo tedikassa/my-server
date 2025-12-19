@@ -214,13 +214,17 @@ func AskPayout(context *gin.Context) {
 		fmt.Println("clientReference:", strid)
 
 		resp, err := sdk.SendToCustomer(strid, 1, "for delivered order", "+251906626496", "TeleBirr", notifyURL)
+        fmt.Println("error :",err.Error())
 		if err != nil {
 			results = append(results, gin.H{
 				"attempt": i + 1,
 				"status":  "fail",
 				"error":   err.Error(),
+            
 			})
-			continue
+            continue
+
+			
 		}
 		results = append(results, gin.H{
 			"attempt": i + 1,
