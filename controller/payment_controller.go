@@ -24,7 +24,7 @@ AwEHoUQDQgAEqJl+TIowE6CAhoghgmH+cdzn5+WNax9/REqXJf6b1HdJCRZBCXWT
 
 	const GATEWAY_MERCHANT_ID = "9e2dab64-e2bb-4837-9b85-d855dd878d2b"
 
-	const testBed = false
+	const testBed = true
 
 func Payment(context *gin.Context) {
 	var order model.Order
