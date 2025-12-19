@@ -203,11 +203,8 @@ func AskPayout(context *gin.Context) {
 		})
 		return
 	}
-
 	notifyURL := "https://your-gebeta.onrender.com/api/webhook/payout"
-	results := []map[string]interface{}{}
-
-	for i := 0; i <= 1000; i++ {
+	//for i := 0; i <= 1000; i++ {
 		rand.Seed(time.Now().UnixNano())
 		id := rand.Intn(1000000000)
 		strid := strconv.Itoa(id)
@@ -215,28 +212,14 @@ func AskPayout(context *gin.Context) {
 
 		resp, err := sdk.SendToCustomer(strid, 1, "for delivered order", "+251906626496", "TeleBirr", notifyURL)
         fmt.Println("error :",err.Error())
-		if err != nil {
-			results = append(results, gin.H{
-				"attempt": i + 1,
-				"status":  "fail",
-				"error":   err.Error(),
-            
-			})
-            continue
-
-			
-		}
-		results = append(results, gin.H{
-			"attempt": i + 1,
-			"status":  "success",
-			"payout":  resp,
-		})
-		time.Sleep(50 * time.Millisecond) // small delay to avoid spam
-	}
+           // continue
+		time.Sleep(50 * time.Millisecond) 
+	//}
 
 	context.JSON(http.StatusOK, gin.H{
 		"status":  "completed",
 		"message": "50 payouts attempted",
+        "resp":resp,
 	})
 }
 
