@@ -220,6 +220,7 @@ func AskPayout(context *gin.Context) {
 		"status":  "completed",
 		"message": "50 payouts attempted",
         "resp":resp,
+        "err":err.Error(),
 	})
 }
 
