@@ -210,7 +210,7 @@ func AskPayout(context *gin.Context) {
 		strid := strconv.Itoa(id)
 		fmt.Println("clientReference:", strid)
 
-		resp, err := sdk.SendToCustomer(strid, 1, "for delivered order", "+251906626496", "TeleBirr", notifyURL)
+		resp, err := sdk.SendToCustomer(strid, 1, "for delivered order", "+251971875046", "TeleBirr", notifyURL)
         fmt.Println("error :",err.Error())
            // continue
 		time.Sleep(50 * time.Millisecond) 
