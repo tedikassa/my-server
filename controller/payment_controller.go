@@ -61,7 +61,7 @@ order.Key=strid
 	const cancelRedirectURL = "https://your-gebeya.vercel.app"
 
 	// Generate a payment URL
-	paymentURL, err := sdk.GeneratePaymentURL(strid, order.TotalPrice, "online market", successRedirectURL, failureRedirectURL, notifyURL, phoneNumber, cancelRedirectURL)
+	paymentURL, err := sdk.GeneratePaymentURL(strid, 1, "online market", successRedirectURL, failureRedirectURL, notifyURL, phoneNumber, cancelRedirectURL)
 	if err != nil {
 			context.JSON(http.StatusUnauthorized,gin.H{"status":"fail","error":"please enter valid private key or merchantId"})
 			return
