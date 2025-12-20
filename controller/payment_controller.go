@@ -16,13 +16,13 @@ import (
 )
 const PRIVATE_KEY_IN_PEM = `
 -----BEGIN EC PRIVATE KEY-----
-MHcCAQEEIF/mI9tSZxKbfEniC+3yfvwIS/D76+p/ky/oDmKAwu5roAoGCCqGSM49
-AwEHoUQDQgAEqJl+TIowE6CAhoghgmH+cdzn5+WNax9/REqXJf6b1HdJCRZBCXWT
-6coLZ23OyF5x9uVOUXixZeB7J7y9iSWDzw==
+MHcCAQEEIF1FiolOiNt9VZga7Xv2Hnc9ogec+n17oAC7vtls3fBuoAoGCCqGSM49
+AwEHoUQDQgAEEcfE9DYOz/pkenjJ4Abdgr2BsYB5zhh+3RxlHA+ZDlQ63+RTJS2B
+A2vqUeASic2BPMd+LqrAlo+5nCLqdBm//g==
 -----END EC PRIVATE KEY-----
 `
 
-	const GATEWAY_MERCHANT_ID = "9e2dab64-e2bb-4837-9b85-d855dd878d2b"
+const GATEWAY_MERCHANT_ID = "9e2dab64-e2bb-4837-9b85-d855dd878d2b"
 
 	const testBed = false
 
