@@ -11,7 +11,7 @@ import (
 
 var DB *gorm.DB
 func ConnectDatabase() {
- dsn := "host=dpg-d4q6avali9vc739of510-a user=ecomerce1_d6vt_user password=SwXbRnFCQh5K8SKLVsiCbjv3M2ZwAVBH dbname=ecomerce1_d6vt port=5432 sslmode=require"
+ dsn := "host=dpg-d5kgp4re5dus73a9fnn0-a user=ecomerce2_ps8d_user password=Rm9S8QddlHryCeffjEPWE7SbMqBzw4pS dbname=ecomerce2_ps8d port=5432 sslmode=require"
 
     
     db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
